@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TestForge AI | QA Test Case Generator</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <div class="brand-mark">TF</div>
+        <p class="eyebrow">Professional AI QA Workspace</p>
+        <h1>TestForge AI</h1>
+        <p class="subtitle">Generate test cases, analyze coverage, export QA packs, and convert requirements into automation-ready assets.</p>
+        <div class="hero-pills">
+          <span>AI test generation</span>
+          <span>Coverage dashboard</span>
+          <span>Client-ready exports</span>
+        </div>
+      </div>
+      <div class="hero-actions hidden" id="userBox">
+        <span id="userName"></span>
+        <button class="ghost" id="logoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <section class="auth-grid" id="authView">
+      <div class="card auth-card feature-panel">
+        <p class="eyebrow">Why clients like it</p>
+        <h2>Turn rough requirements into a QA delivery pack.</h2>
+        <p class="muted">This upgraded MVP now includes analytics, pie charts, project deletion, requirement deletion, table filters, duplicate cases, and a cleaner SaaS-style interface.</p>
+        <div class="feature-list">
+          <span>✓ Functional, negative, boundary, UI, API, security cases</span>
+          <span>✓ PDF, Excel, CSV, Jira CSV exports</span>
+          <span>✓ Playwright scaffold generator</span>
+          <span>✓ Project-level QA score and visual breakdowns</span>
+        </div>
+      </div>
+
+      <div class="auth-column">
+        <div class="card auth-card">
+          <h2>Create account</h2>
+          <p class="muted">First time running the app? Sign up and your work will be saved locally.</p>
+          <form id="signupForm" class="stack">
+            <input id="signupName" placeholder="Your name" required minlength="2" />
+            <input id="signupEmail" type="email" placeholder="Email" required />
+            <input id="signupPassword" type="password" placeholder="Password" required minlength="6" />
+            <button type="submit">Sign up</button>
+          </form>
+        </div>
+
+        <div class="card auth-card">
+          <h2>Login</h2>
+          <p class="muted">Use the account you created on this local app.</p>
+          <form id="loginForm" class="stack">
+            <input id="loginEmail" type="email" placeholder="Email" required />
+            <input id="loginPassword" type="password" placeholder="Password" required />
+            <button type="submit">Login</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <main class="app hidden" id="appView">
+      <aside class="sidebar card">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Workspace</p>
+            <h2>Projects</h2>
+          </div>
+        </div>
+
+        <form id="projectForm" class="stack compact">
+          <input id="projectName" placeholder="Project name e.g. Ecommerce QA" required minlength="2" />
+          <textarea id="projectDescription" rows="3" placeholder="Short description"></textarea>
+          <button type="submit">Create Project</button>
+        </form>
+
+        <div class="divider"></div>
+        <div id="projectsList" class="project-list"></div>
+      </aside>
+
+      <section class="workspace">
+        <section class="dashboard-card card">
+          <div class="section-head align-center">
+            <div>
+              <p class="eyebrow">Executive dashboard</p>
+              <h2>Project health & coverage</h2>
+              <p class="muted" id="dashboardSubtitle">Select a project to see coverage analytics.</p>
+            </div>
+            <span id="selectedProjectLabel" class="pill">No project selected</span>
+          </div>
+
+          <div id="metricsGrid" class="metrics-grid"></div>
+          <div id="chartBoard" class="chart-board"></div>
+          <div id="recommendations" class="recommendations"></div>
+        </section>
+
+        <div class="card generator-card">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Generator</p>
+              <h2>Generate test cases</h2>
+            </div>
+          </div>
+
+          <form id="generateForm" class="grid-form">
+            <label>
+              Project
+              <select id="projectSelect" required></select>
+            </label>
+            <label>
+              Module
+              <input id="moduleName" value="Authentication" placeholder="Authentication, Checkout, Admin" required />
+            </label>
+            <label class="wide">
+              Requirement title
+              <input id="requirementTitle" value="Login using email and password" required minlength="2" />
+            </label>
+            <label class="wide">
+              Requirement / User story / SRS text
+              <textarea id="requirementText" rows="8" required minlength="10">The system should allow users to login using email and password. Invalid credentials should show a clear error message.</textarea>
+            </label>
+
+            <div class="wide upload-box">
+              <div>
+                <strong>Upload SRS / PDF / DOCX / TXT</strong>
+                <p class="muted">Extract text from a requirement file and use it directly in the generator.</p>
+              </div>
+              <input id="requirementFile" type="file" accept=".pdf,.docx,.txt,.md" />
+              <button type="button" class="secondary" id="extractBtn">Extract Text</button>
+            </div>
+
+            <label>
+              Number of cases
+              <input id="numberOfCases" type="number" value="8" min="1" max="30" />
+            </label>
+
+            <div class="wide">
+              <span class="label-title">Test types</span>
+              <div class="checkbox-group">
+                <label><input type="checkbox" value="Functional" checked /> Functional</label>
+                <label><input type="checkbox" value="Negative" checked /> Negative</label>
+                <label><input type="checkbox" value="Boundary" checked /> Boundary</label>
+                <label><input type="checkbox" value="Validation" checked /> Validation</label>
+                <label><input type="checkbox" value="UI" /> UI</label>
+                <label><input type="checkbox" value="API" /> API</label>
+                <label><input type="checkbox" value="Security" /> Security</label>
+                <label><input type="checkbox" value="Performance" /> Performance</label>
+              </div>
+            </div>
+
+            <button id="generateBtn" type="submit" class="wide primary">Generate & Save Test Cases</button>
+          </form>
+
+          <p id="status" class="status"></p>
+          <div id="assumptions" class="note hidden"></div>
+        </div>
+
+        <div class="two-col">
+          <div class="card llm-card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Local LLM</p>
+                <h2>AI engine status</h2>
+                <p class="muted">Use OpenAI, local Ollama, or fallback demo mode depending on your .env settings.</p>
+              </div>
+              <button type="button" class="secondary small" id="refreshLlmBtn">Refresh</button>
+            </div>
+            <div id="llmStatus" class="llm-status">Checking AI engine...</div>
+          </div>
+
+          <div class="card history-card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">History control</p>
+                <h2>Delete generated history</h2>
+                <p class="muted">Clear saved requirements, generated test cases, and uploaded requirement text while keeping your account.</p>
+              </div>
+            </div>
+            <div id="historySummary" class="history-summary">No history loaded yet.</div>
+            <div class="history-actions">
+              <button type="button" class="danger" id="clearProjectHistoryBtn">Clear Selected Project History</button>
+              <button type="button" class="danger" id="clearAllHistoryBtn">Clear All History</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Project requirements</p>
+                <h2>Saved requirements</h2>
+              </div>
+            </div>
+            <div id="requirementsList" class="requirements-list"></div>
+          </div>
+
+          <div class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Exports</p>
+                <h2>Download QA assets</h2>
+              </div>
+            </div>
+            <div class="export-grid">
+              <button class="secondary" data-export="csv">CSV</button>
+              <button class="secondary" data-export="excel">Excel</button>
+              <button class="secondary" data-export="pdf">PDF</button>
+              <button class="secondary" data-export="jira-csv">Jira CSV</button>
+              <button class="secondary" data-export="playwright">Playwright .spec.ts</button>
+            </div>
+            <p class="muted" id="exportHelp">Select a requirement first.</p>
+          </div>
+        </div>
+
+        <div class="card results-card">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Review desk</p>
+              <h2>Editable test cases</h2>
+              <p id="resultMeta" class="muted"></p>
+            </div>
+          </div>
+
+          <div class="table-tools">
+            <input id="caseSearch" placeholder="Search title, steps, expected result..." />
+            <select id="caseTypeFilter">
+              <option value="">All types</option>
+              <option>Functional</option><option>Negative</option><option>Boundary</option><option>Validation</option>
+              <option>UI</option><option>API</option><option>Security</option><option>Performance</option>
+            </select>
+            <select id="casePriorityFilter">
+              <option value="">All priorities</option>
+              <option>Low</option><option>Medium</option><option>High</option><option>Critical</option>
+            </select>
+            <select id="caseStatusFilter">
+              <option value="">All statuses</option>
+              <option>Draft</option><option>Needs Review</option><option>Approved</option><option>Deprecated</option>
+            </select>
+            <button class="secondary" id="clearFiltersBtn">Clear</button>
+          </div>
+
+          <div id="tableWrap" class="table-wrap empty-state">Generate or select a requirement to view test cases.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

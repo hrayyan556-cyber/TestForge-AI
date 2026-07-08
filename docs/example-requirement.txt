@@ -1,0 +1,1 @@
+The system should allow users to reset their password using their registered email address. The user should receive a reset link by email. Invalid or unregistered emails should not reveal whether an account exists. Password reset links should expire after 15 minutes and should not be reusable.
