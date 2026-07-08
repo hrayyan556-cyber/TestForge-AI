@@ -662,8 +662,8 @@ Aspiring Web Developer | AI Automation Learner  | Building Modern & Responsive W
 
 ---
 
-License
+ ## License
 
-This project is open-source and available for learning, portfolio, and development purposes.
-=======
+>This project is open-source and available for learning, portfolio, and development purposes.
+
 
